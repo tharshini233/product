@@ -1,154 +1,224 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Advanced Search Filter</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Product Catalog with Filters</title>
   <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --accent: #2563eb;
+      --muted: #6b7280;
+    }
     body {
-      background-color: #dff3ff;
       font-family: 'Poppins', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      margin: 0;
+      background: var(--bg);
+      color: #111;
     }
-
-    .search-container {
-      width: 600px;
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
+    .container {
+      max-width: 1100px;
+      margin: 28px auto;
+      padding: 18px;
     }
-
-    /* Search Bar */
-    .search-bar {
+    header {
       display: flex;
       align-items: center;
-      background: linear-gradient(to right, #667eea, #764ba2, #ff5f6d);
-      padding: 10px 20px;
-      border-radius: 25px;
-      margin: 20px;
+      justify-content: space-between;
+      margin-bottom: 20px;
     }
-
-    .search-bar input {
-      flex: 1;
-      border: none;
-      outline: none;
-      background: transparent;
-      color: #fff;
-      font-size: 16px;
+    h1 {
+      font-size: 22px;
+      margin: 0;
+      color: var(--accent);
     }
-
-    .search-bar input::placeholder {
-      color: #fff;
-      opacity: 0.8;
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 20px;
     }
-
-    .search-bar i {
-      color: #fff;
-      font-size: 20px;
-      margin-left: 10px;
+    .sidebar {
+      background: var(--card);
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .filter-group {
+      margin-bottom: 16px;
+    }
+    .filter-group h4 {
+      margin: 0 0 8px 0;
+      font-size: 15px;
+      color: var(--accent);
+    }
+    label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 5px;
       cursor: pointer;
     }
-
-    /* Advanced Filters */
-    .filters {
-      padding: 20px;
-    }
-
-    .filters h4 {
-      margin-bottom: 15px;
-      color: #333;
-      font-weight: 600;
-    }
-
-    .filter-grid {
+    .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 15px;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
     }
-
-    select {
-      width: 100%;
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .thumb {
+      height: 180px;
+      background-size: cover;
+      background-position: center;
+    }
+    .info {
+      padding: 12px;
+    }
+    .title {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .price {
+      color: var(--accent);
+      font-weight: bold;
+    }
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
       padding: 8px 10px;
       border-radius: 8px;
-      border: none;
-      background: #e5e5e5;
-      color: #555;
-      font-size: 14px;
       cursor: pointer;
-      outline: none;
+      font-size: 13px;
     }
-
-    .results {
-      font-size: 14px;
-      color: #777;
-      margin-bottom: 10px;
+    .btn:hover { background: #1d4ed8; }
+    .tags small {
+      background: #f0f2f8;
+      padding: 3px 6px;
+      border-radius: 5px;
+      font-size: 12px;
+      margin-right: 5px;
     }
-
-    .actions {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 15px;
+    @media (max-width: 880px) {
+      .layout { grid-template-columns: 1fr; }
     }
-
-    .reset-btn {
-      background: none;
-      border: none;
-      color: #777;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    .search-btn {
-      background: linear-gradient(to right, #667eea, #ff5f6d);
-      border: none;
-      color: #fff;
-      font-weight: 600;
-      padding: 8px 20px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .search-btn:hover {
-      opacity: 0.8;
-    }
-
   </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <h1>🛍️ Product Catalog with Filters</h1>
+      <small style="color:var(--muted)">Run this file in VS Code → Live Server</small>
+    </header>
 
-  <div class="search-container">
-    <div class="search-bar">
-      <input type="text" placeholder="Type Keywords">
-      <i>&#128269;</i>
-    </div>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="filter-group">
+          <h4>Category</h4>
+          <div>
+            <label><input type="checkbox" value="Clothing" checked> Clothing</label>
+            <label><input type="checkbox" value="Accessories" checked> Accessories</label>
+            <label><input type="checkbox" value="Electronics" checked> Electronics</label>
+            <label><input type="checkbox" value="Footwear" checked> Footwear</label>
+          </div>
+        </div>
 
-    <div class="filters">
-      <h4>ADVANCED SEARCH</h4>
-      <div class="filter-grid">
-        <select><option>Accessories</option></select>
-        <select><option>Color</option></select>
-        <select><option>Size</option></select>
-        <select><option>Sale</option></select>
-        <select><option>Time</option></select>
-        <select><option>Type</option></select>
-      </div>
+        <div class="filter-group">
+          <h4>Max Price</h4>
+          <input type="range" id="priceRange" min="0" max="1000" value="1000" step="10" />
+          <p id="priceValue">₹1000</p>
+        </div>
 
-      <p class="results"><b>108</b> results</p>
+        <div class="filter-group">
+          <h4>Search</h4>
+          <input type="text" id="search" placeholder="Search products..." style="width:100%;padding:6px;border-radius:6px;border:1px solid #ccc;">
+        </div>
 
-      <div class="actions">
-        <button class="reset-btn">RESET</button>
-        <button class="search-btn">SEARCH</button>
-      </div>
+        <button id="clearFilters" class="btn" style="width:100%;">Clear Filters</button>
+      </aside>
+
+      <main>
+        <div class="grid" id="productGrid"></div>
+      </main>
     </div>
   </div>
 
+  <script>
+    const products = [
+      {title:'Leather Jacket',category:'Clothing',price:699,img:'https://cdn-images.farfetch-contents.com/17/81/19/24/17811924_37690679_600.jpg'},
+      {title:'Smart Watch',category:'Electronics',price:499,img:'https://m.media-amazon.com/images/I/61pIzNaNRWL.jpg'},
+      {title:'Wireless Earbuds',category:'Electronics',price:299,img:'https://instamart-media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_600/NI_CATALOG/IMAGES/CIW/2025/8/1/6825f5ff-e528-4b5a-85d9-72952babf307_LHSZ5CF0QK.png'},
+      {title:'Silk Scarf',category:'Accessories',price:149,img:'https://m.media-amazon.com/images/I/71Yz6GKhDFL._AC_UY1100_.jpg'},
+      {title:'Sunglasses',category:'Accessories',price:259,img:'http://www.rkumar.in/cdn/shop/files/0OO9430__943001__P21__shad__qt.jpg?v=1757185672'},
+      {title:'Bluetooth Speaker',category:'Electronics',price:399,img:'https://rukminim2.flixcart.com/image/480/640/xif0q/speaker/party-speaker/9/d/f/apollo-one-20w-bluetooth-portable-speaker-with-wireless-karaoke-original-imahgqsar5tbwebj.jpeg?q=90'},
+      {title:'Cotton Shirt',category:'Clothing',price:199,img:'http://www.simplikurta.com/cdn/shop/files/O1CN01sHdRQM1nOETJZ06Qi__2215870365079-0-cib-Photoroom.png?v=1710578374'},
+      {title:'Denim Jeans',category:'Clothing',price:299,img:'https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1725966879-mango-wide-leg-jeans-66e02a10419f1.jpg'}
+    ];
+
+    const grid = document.getElementById('productGrid');
+    const range = document.getElementById('priceRange');
+    const priceValue = document.getElementById('priceValue');
+    const search = document.getElementById('search');
+    const clearBtn = document.getElementById('clearFilters');
+
+    function render() {
+      const checkedCategories = [...document.querySelectorAll('input[type="checkbox"]:checked')].map(cb => cb.value);
+      const maxPrice = +range.value;
+      const query = search.value.toLowerCase();
+
+      const filtered = products.filter(p =>
+        checkedCategories.includes(p.category) &&
+        p.price <= maxPrice &&
+        p.title.toLowerCase().includes(query)
+      );
+
+      grid.innerHTML = '';
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="thumb" style="background-image:url('${p.img}')"></div>
+          <div class="info">
+            <div class="title">${p.title}</div>
+            <div class="meta"><span>${p.category}</span><span class="price">₹${p.price}</span></div>
+            <div class="tags"><small>Popular</small></div>
+            <button class="btn" style="margin-top:8px;">Add to Cart</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    range.addEventListener('input', () => {
+      priceValue.textContent = '₹' + range.value;
+      render();
+    });
+
+    search.addEventListener('input', render);
+
+    clearBtn.addEventListener('click', () => {
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
+      range.value = 1000;
+      search.value = '';
+      priceValue.textContent = '₹1000';
+      render();
+    });
+
+    render();
+  </script>
 </body>
 </html>
 
